@@ -77,8 +77,9 @@ RUN apt-get update && apt-get install -y r-base \
 ########
 # JDK
 
-# Install JDK 7 (latest edition)
-RUN apt-get install -y openjdk-7-jdk
+# Install JDK 8
+RUN apt-get install -y openjdk-8-jdk
+
 
 
 ########
