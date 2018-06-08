@@ -63,10 +63,14 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 # RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 RUN apt-get update && apt-get install -y r-base \
-        libzmq3-dev \  # https://github.com/IRkernel/IRkernel
-        libcurl4-gnutls-dev \  # http://stackoverflow.com/questions/26445815/error-when-installing-devtools-package-for-r-in-ubuntu
-        libcurl4-openssl-dev \ # http://stackoverflow.com/questions/20671814/non-zero-exit-status-r-3-0-1-xml-and-rcurl
-        libxml2-dev && \  # http://stackoverflow.com/questions/20671814/non-zero-exit-status-r-3-0-1-xml-and-rcurl
+        # https://github.com/IRkernel/IRkernel
+        libzmq3-dev \  
+        # http://stackoverflow.com/questions/26445815/error-when-installing-devtools-package-for-r-in-ubuntu
+        libcurl4-gnutls-dev \ 
+        # http://stackoverflow.com/questions/20671814/non-zero-exit-status-r-3-0-1-xml-and-rcurl
+        libcurl4-openssl-dev \ 
+        # http://stackoverflow.com/questions/20671814/non-zero-exit-status-r-3-0-1-xml-and-rcurl
+        libxml2-dev && \  
     apt-get clean
 
 
@@ -80,7 +84,7 @@ RUN apt-get install -y openjdk-7-jdk
 ########
 # R env with RStudio Server
 RUN apt-get install -y r-base \
-    && apt-get install gdebi-core \
+    && gdebi-core \
     && wget https://download2.rstudio.org/rstudio-server-1.1.453-amd64.deb \
     && gdebi rstudio-server-1.1.453-amd64.deb
 
