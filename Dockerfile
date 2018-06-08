@@ -68,7 +68,7 @@ RUN apt-get update && apt-get install -y r-base \
         # http://stackoverflow.com/questions/26445815/error-when-installing-devtools-package-for-r-in-ubuntu
         libcurl4-gnutls-dev \ 
         # http://stackoverflow.com/questions/20671814/non-zero-exit-status-r-3-0-1-xml-and-rcurl
-        libcurl4-openssl-dev \ 
+        # libcurl4-openssl-dev \ 
         # http://stackoverflow.com/questions/20671814/non-zero-exit-status-r-3-0-1-xml-and-rcurl
         libxml2-dev && \  
     apt-get clean
