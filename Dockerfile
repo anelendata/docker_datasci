@@ -85,7 +85,6 @@ RUN apt-get install -y openjdk-8-jdk
 ########
 # R env with RStudio Server
 RUN apt-get install -y r-base \
-    && gdebi-core \
     && wget https://download2.rstudio.org/rstudio-server-1.1.453-amd64.deb \
     && gdebi rstudio-server-1.1.453-amd64.deb
 
