@@ -6,10 +6,6 @@ MAINTAINER Daigo Tanaka <daigo.tanaka@gmail.com>
 # upgrade is not recommended by the best practice page
 # RUN apt-get -y upgrade
 
-ARG DS_HOME=/home/ds
-RUN mkdir /home/ds
-RUN useradd ds -d $DS_HOME && echo "ds:ds" | chpasswd && chown ds:ds $DS_HOME
-
 # Define locale
 ENV LANGUAGE en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -49,6 +45,7 @@ RUN set -ex \
         wget \
         git \
         openssh-server \
+        postgresql postgresql-contrib \
         vim \
         gdebi-core \
     && sed -i 's/^# en_US.UTF-8 UTF-8$/en_US.UTF-8 UTF-8/g' /etc/locale.gen \
@@ -82,14 +79,18 @@ RUN apt-get update && apt-get install -y r-base \
 
 # Install JDK 8
 RUN apt-get install -y openjdk-8-jdk
-
-
+RUN ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/lib/jvm/default-java
+ENV JAVA_HOME=/usr/lib/jvm/default-java
+ENV PATH="${PATH}:$JAVA_HOME/bin" 
 
 ########
 # R env with RStudio Server
 RUN apt-get install -y r-base psmisc \
     && wget https://download2.rstudio.org/rstudio-server-1.1.453-amd64.deb \
     && gdebi --non-interactive rstudio-server-1.1.453-amd64.deb
+
+# RUN R CMD javareconf
+
 
 ########
 # Python data science env with Jupyter Notebook
@@ -136,6 +137,24 @@ RUN apt-get purge --auto-remove -yqq $buildDeps \
         /usr/share/man \
         /usr/share/doc \
         /usr/share/doc-base
+
+
+########
+# Add a user called ds
+
+ARG DS_HOME=/home/ds
+RUN mkdir /home/ds
+RUN useradd ds -d $DS_HOME && echo "ds:ds" | chpasswd && chown ds:ds $DS_HOME
+
+
+########
+# Install R packages
+
+RUN echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos = r);" > ~/.Rprofile
+RUN Rscript -e "install.packages('rJava', 'RJDBC', 'RCurl')"
+RUN Rscript -e "install.packages('dplyr', 'tidyr', 'stringr', 'dummies')"
+RUN Rscript -e "install.packages('knitr', 'ggplot2', 'ggthemes', 'gridExtra', 'rCharts')"
+RUN Rscript -e "install.packages('caret', 'ROCR', 'randomForest',  'xgboost', 'prophet')"
 
 
 ########
