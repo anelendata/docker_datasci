@@ -7,7 +7,7 @@ MAINTAINER Daigo Tanaka <daigo.tanaka@gmail.com>
 # RUN apt-get -y upgrade
 
 ARG DS_HOME=/home/ds
-RUN adduser --quiet ds -d $DS_HOME && echo "ds:ds" | chpasswd 
+RUN useradd ds -d $DS_HOME && echo "ds:ds" | chpasswd 
 
 # Define locale
 ENV LANGUAGE en_US.UTF-8
