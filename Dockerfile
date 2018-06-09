@@ -151,10 +151,11 @@ RUN useradd ds -d $DS_HOME && echo "ds:ds" | chpasswd && chown ds:ds $DS_HOME
 # Install R packages
 
 RUN echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos = r);" > ~/.Rprofile
-RUN Rscript -e "install.packages('rJava', 'RJDBC', 'RCurl')"
-RUN Rscript -e "install.packages('dplyr', 'tidyr', 'stringr', 'dummies')"
-RUN Rscript -e "install.packages('knitr', 'ggplot2', 'ggthemes', 'gridExtra', 'rCharts')"
-RUN Rscript -e "install.packages('caret', 'ROCR', 'randomForest',  'xgboost', 'prophet')"
+RUN Rscript -e "install.packages(c('rJava', 'RJDBC', 'RCurl'))"
+RUN Rscript -e "install.packages(c('dplyr', 'tidyr', 'stringr', 'dummies'))"
+RUN Rscript -e "install.packages(c('knitr', 'ggplot2', 'ggthemes', 'gridExtra', 'rCharts'))"
+RUN Rscript -e "install.packages(c('randomForest', 'xgboost', 'prophet'))"
+RUN Rscript -e "install.packages(c('caret', 'pmml'))"
 
 
 ########
