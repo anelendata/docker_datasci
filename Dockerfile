@@ -83,6 +83,11 @@ RUN ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/lib/jvm/default-java
 ENV JAVA_HOME=/usr/lib/jvm/default-java
 ENV PATH="${PATH}:$JAVA_HOME/bin" 
 
+
+########
+# Graphics
+RUN apt-get update && apt-get install -y libcairo2-dev libxt-dev
+
 ########
 # R env with RStudio Server
 RUN apt-get install -y r-base psmisc \
@@ -150,12 +155,22 @@ RUN useradd ds -d $DS_HOME && echo "ds:ds" | chpasswd && chown ds:ds $DS_HOME
 ########
 # Install R packages
 
+# prophet depends on rstan, but its installation in R fails for Ubuntu
+# RUN Rscript -e "install.packages('rstan', repos = 'https://cloud.r-project.org/', dependencies=TRUE)")
+# Workaround: https://github.com/stan-dev/rstan/issues/487#issuecomment-361355750
+RUN apt-get update && apt-get -y install software-properties-common python-software-p 
+RUN add-apt-repository -y "ppa:marutter/rrutter"
+RUN add-apt-repository -y "ppa:marutter/c2d4u"
+RUN apt-get update && apt-get -y install r-cran-rstan
+
 RUN echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos = r);" > ~/.Rprofile
 RUN Rscript -e "install.packages(c('rJava', 'RJDBC', 'RCurl'), dependencies=TRUE)"
 RUN Rscript -e "install.packages(c('dplyr', 'tidyr', 'stringr', 'dummies'), dependencies=TRUE)"
 RUN Rscript -e "install.packages(c('knitr', 'ggplot2', 'ggthemes', 'gridExtra', 'rCharts'), dependencies=TRUE)"
-RUN Rscript -e "install.packages(c('randomForest', 'xgboost', 'prophet'), dependencies=TRUE)"
+RUN Rscript -e "install.packages(c('randomForest', 'xgboost'), dependencies=TRUE)"
+RUN Rscript -e "install.packages('prophet', dependencies=TRUE)"
 RUN Rscript -e "install.packages(c('caret', 'pmml'), dependencies=TRUE)"
+
 
 
 ########
@@ -163,6 +178,12 @@ RUN Rscript -e "install.packages(c('caret', 'pmml'), dependencies=TRUE)"
 
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/rserver.conf /etc/rstudio/rserver.conf
+
+# Copy utility scripts
+
+RUN mkdir /home/ds/bin
+COPY script/setup_git.sh /home/ds/bin/setup_git.sh
+RUN chown -R ds:ds /home/ds/bin
 
 # Standard SSH port
 # 22: SSH
