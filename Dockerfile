@@ -7,7 +7,8 @@ MAINTAINER Daigo Tanaka <daigo.tanaka@gmail.com>
 # RUN apt-get -y upgrade
 
 ARG DS_HOME=/home/ds
-RUN useradd ds -d $DS_HOME && echo "ds:ds" | chpasswd && chown "ds:ds" $DS_HOME
+RUN mkdir /home/ds
+RUN useradd ds -d $DS_HOME && echo "ds:ds" | chpasswd && chown ds:ds $DS_HOME
 
 # Define locale
 ENV LANGUAGE en_US.UTF-8
