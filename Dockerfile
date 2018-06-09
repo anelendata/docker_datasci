@@ -34,7 +34,7 @@ RUN set -ex \
     && apt-get install -yqq --no-install-recommends \
         $buildDeps \
         sudo \
-        pparmor-utils \
+        apparmor-utils \
         python3-pip \
         python3-requests \
         # mysql-client \
