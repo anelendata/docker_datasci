@@ -2,4 +2,5 @@
 
 /usr/sbin/sshd -D
 
-rstudio-server
+rstudio-server start
+
