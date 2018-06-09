@@ -7,7 +7,7 @@ MAINTAINER Daigo Tanaka <daigo.tanaka@gmail.com>
 # RUN apt-get -y upgrade
 
 ARG DS_HOME=/home/ds
-RUN useradd ds -d $DS_HOME && echo "ds:ds" | chpasswd && chown ds:ds $DS_HOME
+RUN useradd ds -d $DS_HOME && echo "ds:ds" | chpasswd && chown "ds:ds" $DS_HOME
 
 # Define locale
 ENV LANGUAGE en_US.UTF-8
@@ -141,6 +141,7 @@ RUN apt-get purge --auto-remove -yqq $buildDeps \
 # Wrapping up
 
 COPY script/entrypoint.sh /entrypoint.sh
+COPY config/rserver.conf /etc/rstudio/rserver.conf
 
 # Standard SSH port
 # 22: SSH
@@ -169,4 +170,4 @@ EXPOSE 22 8787 8080 5555 8793
 # CMD ["webserver"] # set default arg for entrypoint
 # CMD ["/usr/sbin/sshd", "-D"]
 
-# ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
