@@ -158,7 +158,7 @@ RUN useradd ds -d $DS_HOME && echo "ds:ds" | chpasswd && chown ds:ds $DS_HOME
 # prophet depends on rstan, but its installation in R fails for Ubuntu
 # RUN Rscript -e "install.packages('rstan', repos = 'https://cloud.r-project.org/', dependencies=TRUE)")
 # Workaround: https://github.com/stan-dev/rstan/issues/487#issuecomment-361355750
-RUN apt-get update && apt-get -y install software-properties-common python-software-p 
+RUN apt-get update && apt-get -y install software-properties-common python-software-properties
 RUN add-apt-repository -y "ppa:marutter/rrutter"
 RUN add-apt-repository -y "ppa:marutter/c2d4u"
 RUN apt-get update && apt-get -y install r-cran-rstan
