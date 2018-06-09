@@ -33,6 +33,7 @@ RUN set -ex \
     && apt-get update -yqq \
     && apt-get install -yqq --no-install-recommends \
         $buildDeps \
+        sudo \
         python3-pip \
         python3-requests \
         # mysql-client \
