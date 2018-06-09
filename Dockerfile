@@ -6,8 +6,8 @@ MAINTAINER Daigo Tanaka <daigo.tanaka@gmail.com>
 # upgrade is not recommended by the best practice page
 # RUN apt-get -y upgrade
 
-# ARG DS_HOME=/home/ds
-# RUN useradd -ms /bin/bash -d ${DS_HOME} ds
+ARG DS_HOME=/home/ds
+RUN useradd -ms /bin/bash -d $DS_HOME -p ds ds
 
 # Define locale
 ENV LANGUAGE en_US.UTF-8
