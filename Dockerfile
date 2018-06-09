@@ -34,6 +34,7 @@ RUN set -ex \
     && apt-get install -yqq --no-install-recommends \
         $buildDeps \
         sudo \
+        pparmor-utils \
         python3-pip \
         python3-requests \
         # mysql-client \
@@ -168,4 +169,4 @@ EXPOSE 22 8787 8080 5555 8793
 # CMD ["webserver"] # set default arg for entrypoint
 # CMD ["/usr/sbin/sshd", "-D"]
 
-ENTRYPOINT ["/entrypoint.sh"]
+# ENTRYPOINT ["/entrypoint.sh"]
