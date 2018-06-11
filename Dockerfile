@@ -183,14 +183,6 @@ RUN apt-get purge --auto-remove -yqq $buildDeps \
 
 
 ########
-# Add a user called ds
-
-ARG DS_HOME=/home/ds
-RUN mkdir /home/ds
-RUN useradd ds -d $DS_HOME && echo "ds:ds" | chpasswd && chown ds:ds $DS_HOME
-
-
-########
 # Install R packages
 
 # prophet depends on rstan, but its installation in R fails for Ubuntu
@@ -215,6 +207,7 @@ RUN Rscript -e "install.packages(c('caret', 'pmml'), dependencies=TRUE)"
 
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/rserver.conf /etc/rstudio/rserver.conf
+COPY config/jupyterhub /etc/init.d/jupyterhub
 
 # Copy utility scripts
 
