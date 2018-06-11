@@ -84,7 +84,7 @@ RUN apt-get update && apt-get install -y r-base \
 RUN apt-get install -y openjdk-8-jdk
 RUN ln -s /usr/lib/jvm/java-8-openjdk-amd64 /usr/lib/jvm/default-java
 ENV JAVA_HOME=/usr/lib/jvm/default-java
-ENV PATH="${PATH}:$JAVA_HOME/bin" 
+ENV PATH="$PATH:$JAVA_HOME/bin"
 
 
 ########
@@ -138,7 +138,7 @@ RUN apt-get install -y r-base psmisc \
 ########
 # Anaconda 3.5.2 and JupyterHub
 
-ENV PATH="/opt/conda/bin${PATH}" 
+ENV PATH="$PATH:/opt/conda/bin"
 
 RUN apt-get update --fix-missing && \
     apt-get install -y bzip2 ca-certificates \
