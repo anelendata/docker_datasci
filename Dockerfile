@@ -158,7 +158,8 @@ RUN /opt/conda/bin/conda install -y -c conda-forge jupyterhub
 # dbt
 # https://dbt.readme.io
 
-RUN pip install dbt
+RUN conda install -c conda-forge dbt
+# RUN pip install dbt
 
 
 ########
