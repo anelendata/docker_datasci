@@ -112,40 +112,43 @@ RUN pip install dbt
 
 
 ########
-# TODO: Airflow
+# Airflow
 
-# ARG AIRFLOW_VERSION=1.9.0
-# ARG AIRFLOW_HOME=/usr/local/Airflow
+ARG AIRFLOW_VERSION=1.9.0
+ARG AIRFLOW_HOME=/usr/local/Airflow
 
-# RUN useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow \
-#     && pip install -U pip setuptools wheel \
-#     && pip install Cython \
-#     && pip install pytz \
-#     && pip install pyOpenSSL \
-#     && pip install ndg-httpsclient \
-#     && pip install pyasn1 \
-#     && pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql]==$AIRFLOW_VERSION \
-#     && pip install celery[redis]==4.1.1 \
+RUN useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow \
+    && pip install -U pip setuptools wheel \
+    && pip install Cython \
+    && pip install pytz \
+    && pip install pyOpenSSL \
+    && pip install ndg-httpsclient \
+    && pip install pyasn1 \
+    && pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql]==${AIRFLOW_VERSION} \
+    && pip install celery[redis]==4.1.1 \
+RUN chown -R airflow: ${AIRFLOW_HOME}
 
 
 ########
 # R env with RStudio Server
+ARG RSTUDIO_SERVER_VERSION=1.1.453
 RUN apt-get install -y r-base psmisc \
-    && wget https://download2.rstudio.org/rstudio-server-1.1.453-amd64.deb \
-    && gdebi --non-interactive rstudio-server-1.1.453-amd64.deb
+    && wget https://download2.rstudio.org/rstudio-server-${RSTUDIO_SERVER_VERSION}-amd64.deb \
+    && gdebi --non-interactive rstudio-server-${RSTUDIO_SERVER_VERSION}-amd64.deb
 
 
 ########
-# Anaconda 3.5.2 and JupyterHub
+# Anaconda and JupyterHub
 
+ARG ANACONDA_VERSION=5.2.0
 ENV PATH="$PATH:/opt/conda/bin"
 
 RUN apt-get update --fix-missing && \
     apt-get install -y bzip2 ca-certificates \
     libglib2.0-0 libxext6 libsm6 libxrender1
 
-RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh -O ~/anaconda.sh && \
-# RUN wget --quiet https://repo.anaconda.com/archive/Anaconda2-5.2.0-Linux-x86_64.sh -O ~/anaconda.sh && \
+RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-${ANACONDA_VERSION}-Linux-x86_64.sh -O ~/anaconda.sh && \
+# RUN wget --quiet https://repo.anaconda.com/archive/Anaconda2-${ANACONDA_VERSION}-Linux-x86_64.sh -O ~/anaconda.sh && \
     /bin/bash ~/anaconda.sh -b -p /opt/conda && \
     rm ~/anaconda.sh && \
     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
@@ -206,11 +209,10 @@ RUN Rscript -e "install.packages(c('caret', 'pmml'), dependencies=TRUE)"
 # Wrapping up
 
 COPY script/entrypoint.sh /entrypoint.sh
+
 COPY config/rserver.conf /etc/rstudio/rserver.conf
 COPY config/jupyterhub /etc/init.d/jupyterhub
-
-# Copy utility scripts
-
+COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 COPY script/setup_git.sh /setup_git.sh
 
 # Standard SSH port
@@ -224,15 +226,8 @@ EXPOSE 22 5555 8000 8080 8787 8793
 
 # Airflow
 # COPY script/entrypoint.sh /entrypoint.sh
-# COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
-# 
-# RUN chown -R airflow: ${AIRFLOW_HOME}
-# 
-# EXPOSE 8080 5555 8793
-# 
 # USER airflow
 # WORKDIR ${AIRFLOW_HOME}
-# ENTRYPOINT ["/entrypoint.sh"]
 # CMD ["webserver"] # set default arg for entrypoint
  
 # USER ds
