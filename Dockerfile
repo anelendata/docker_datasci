@@ -107,8 +107,8 @@ RUN apt-get install -y curl grep sed dpkg && \
 # dbt
 # https://dbt.readme.io
 
-RUN pip install -U pip setuptools \
-    && pip install dbt
+# RUN pip install -U pip setuptools \
+RUN pip install dbt
 
 
 ########
