@@ -224,11 +224,11 @@ RUN chown -R ds:ds /home/ds/bin
 
 # Standard SSH port
 # 22: SSH
-# 5555:
+# 5555: Redis to use in Airflow
 # 8000: Jupyter Hub
-# 8080:
+# 8080: Airflow port
 # 8787: R Studio Server
-# 8793:
+# 8793: Airflow worker log server port
 EXPOSE 22 5555 8000 8080 8787 8793
 
 # Airflow
