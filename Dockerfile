@@ -211,9 +211,7 @@ COPY config/jupyterhub /etc/init.d/jupyterhub
 
 # Copy utility scripts
 
-RUN mkdir /home/ds/bin
-COPY script/setup_git.sh /home/ds/bin/setup_git.sh
-RUN chown -R ds:ds /home/ds/bin
+COPY script/setup_git.sh /setup_git.sh
 
 # Standard SSH port
 # 22: SSH

@@ -11,6 +11,9 @@ useradd $USER_NAME -d $USER_HOME
 echo "$USER_NAME:$USER_PASSWORD" | chpasswd
 chown $USER_NAME:$USER_NAME $USER_HOME
 
+mkdir -p /home/$USER_NAME/bin
+cp /setup_git.sh /home/$USER_NAME/bin
+chown -R ds:ds /home/$USER_NAME/bin
 
 /usr/sbin/sshd -D
 
