@@ -35,6 +35,7 @@ RUN set -ex \
         python-pip \
         python3-pip \
         python3-requests \
+        python3-setuptools \
         # mysql-client \
         # mysql-server \
         # default-libmysqlclient-dev \
