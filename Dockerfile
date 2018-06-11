@@ -221,12 +221,12 @@ RUN chown -R ds:ds /home/ds/bin
 
 # Standard SSH port
 # 22: SSH
+# 5555:
+# 8000: Jupyter Hub
 # 8080:
 # 8787: R Studio Server
 # 8793:
-# 8888: Jupyter Notebook
-# 5555:
-EXPOSE 22 8787 8080 5555 8793
+EXPOSE 22 5555 8000 8080 8787 8793
 
 # Airflow
 # COPY script/entrypoint.sh /entrypoint.sh
