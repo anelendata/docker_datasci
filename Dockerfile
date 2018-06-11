@@ -217,7 +217,7 @@ COPY script/setup_git.sh /setup_git.sh
 # 22: SSH
 # 5555: Redis to use in Airflow
 # 8000: Jupyter Hub
-# 8080: Airflow port
+# 8080: Airflow Web UI
 # 8787: R Studio Server
 # 8793: Airflow worker log server port
 EXPOSE 22 5555 8000 8080 8787 8793

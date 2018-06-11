@@ -21,6 +21,7 @@ rstudio-server start
 
 chmod +x /etc/init.d/jupyterhub
 # Create a default config to /etc/jupyterhub/jupyterhub_config.py
+mkdir -p /etc/jupyterhub
 jupyterhub --generate-config -f /etc/jupyterhub/jupyterhub_config.py
 # Start jupyterhub
 service jupyterhub start
