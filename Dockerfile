@@ -32,10 +32,11 @@ RUN set -ex \
         $buildDeps \
         sudo \
         apparmor-utils \
+        python-setuptools \
         python-pip \
-        python3-pip \
         python3-requests \
         python3-setuptools \
+        python3-pip \
         # mysql-client \
         # mysql-server \
         # default-libmysqlclient-dev \
@@ -106,7 +107,8 @@ RUN apt-get install -y curl grep sed dpkg && \
 # dbt
 # https://dbt.readme.io
 
-RUN pip install dbt
+RUN pip install -U pip setuptools \
+    && pip install dbt
 
 
 ########
