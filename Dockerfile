@@ -32,6 +32,7 @@ RUN set -ex \
         $buildDeps \
         sudo \
         apparmor-utils \
+        python-pip \
         python3-pip \
         python3-requests \
         # mysql-client \
@@ -88,24 +89,55 @@ ENV PATH="${PATH}:$JAVA_HOME/bin"
 # Graphics
 RUN apt-get update && apt-get install -y libcairo2-dev libxt-dev
 
+
+########
+# tini
+
+RUN apt-get install -y curl grep sed dpkg && \
+    TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
+    curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
+    dpkg -i tini.deb && \
+    rm tini.deb && \
+    apt-get clean
+
+
 ########
 # R env with RStudio Server
 RUN apt-get install -y r-base psmisc \
     && wget https://download2.rstudio.org/rstudio-server-1.1.453-amd64.deb \
     && gdebi --non-interactive rstudio-server-1.1.453-amd64.deb
 
-# RUN R CMD javareconf
+
+########
+# Anaconda 3.5.2 and JupyterHub
+
+ENV PATH="/opt/conda/bin${PATH}" 
+
+RUN apt-get update --fix-missing && \
+    apt-get install -y bzip2 ca-certificates \
+    libglib2.0-0 libxext6 libsm6 libxrender1
+
+RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh -O ~/anaconda.sh && \
+# RUN wget --quiet https://repo.anaconda.com/archive/Anaconda2-5.2.0-Linux-x86_64.sh -O ~/anaconda.sh && \
+    /bin/bash ~/anaconda.sh -b -p /opt/conda && \
+    rm ~/anaconda.sh && \
+    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
+    echo "conda activate base" >> ~/.bashrc
+
+
+# JupyterHub
+conda install -y -c conda-forge jupyterhub
 
 
 ########
-# Python data science env with Jupyter Notebook
+# TODO: Redash
 
-# Jupyter Notebook
-
+# This one could be on a separate Dockerfile and deployed together via docker-compose
 
 
 ########
-# Airflow
+# TODO: Airflow
 
 # ARG AIRFLOW_VERSION=1.9.0
 # ARG AIRFLOW_HOME=/usr/local/Airflow
@@ -122,11 +154,14 @@ RUN apt-get install -y r-base psmisc \
 
 
 ########
-# ungit
+# dbt
+# https://dbt.readme.io
+
+RUN pip install dbt
 
 
 ########
-# dbt
+# TODO: ungit
 
 
 ########
@@ -164,13 +199,12 @@ RUN add-apt-repository -y "ppa:marutter/c2d4u"
 RUN apt-get update && apt-get -y install r-cran-rstan
 
 RUN echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos = r);" > ~/.Rprofile
-RUN Rscript -e "install.packages(c('rJava', 'RJDBC', 'RCurl'), dependencies=TRUE)"
+RUN Rscript -e "install.packages(c('rJava', 'RJDBC', 'RCurl', ''bigrquery), dependencies=TRUE)"
 RUN Rscript -e "install.packages(c('dplyr', 'tidyr', 'stringr', 'dummies'), dependencies=TRUE)"
 RUN Rscript -e "install.packages(c('knitr', 'ggplot2', 'ggthemes', 'gridExtra', 'rCharts'), dependencies=TRUE)"
 RUN Rscript -e "install.packages(c('randomForest', 'xgboost'), dependencies=TRUE)"
 RUN Rscript -e "install.packages('prophet', dependencies=TRUE)"
 RUN Rscript -e "install.packages(c('caret', 'pmml'), dependencies=TRUE)"
-
 
 
 ########
@@ -187,10 +221,11 @@ RUN chown -R ds:ds /home/ds/bin
 
 # Standard SSH port
 # 22: SSH
-# 8787: R Studio Server
 # 8080:
-# 5555:
+# 8787: R Studio Server
 # 8793:
+# 8888: Jupyter Notebook
+# 5555:
 EXPOSE 22 8787 8080 5555 8793
 
 # Airflow
@@ -213,3 +248,4 @@ EXPOSE 22 8787 8080 5555 8793
 # CMD ["/usr/sbin/sshd", "-D"]
 
 ENTRYPOINT ["/entrypoint.sh"]
+CMD [ "/bin/bash" ]
