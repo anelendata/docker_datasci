@@ -103,6 +103,30 @@ RUN apt-get install -y curl grep sed dpkg && \
 
 
 ########
+# dbt
+# https://dbt.readme.io
+
+RUN pip install dbt
+
+
+########
+# TODO: Airflow
+
+# ARG AIRFLOW_VERSION=1.9.0
+# ARG AIRFLOW_HOME=/usr/local/Airflow
+
+# RUN useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow \
+#     && pip install -U pip setuptools wheel \
+#     && pip install Cython \
+#     && pip install pytz \
+#     && pip install pyOpenSSL \
+#     && pip install ndg-httpsclient \
+#     && pip install pyasn1 \
+#     && pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql]==$AIRFLOW_VERSION \
+#     && pip install celery[redis]==4.1.1 \
+
+
+########
 # R env with RStudio Server
 RUN apt-get install -y r-base psmisc \
     && wget https://download2.rstudio.org/rstudio-server-1.1.453-amd64.deb \
@@ -135,31 +159,6 @@ RUN /opt/conda/bin/conda install -y -c conda-forge jupyterhub
 # TODO: Redash
 
 # This one could be on a separate Dockerfile and deployed together via docker-compose
-
-
-########
-# TODO: Airflow
-
-# ARG AIRFLOW_VERSION=1.9.0
-# ARG AIRFLOW_HOME=/usr/local/Airflow
-
-# RUN useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow \
-#     && pip install -U pip setuptools wheel \
-#     && pip install Cython \
-#     && pip install pytz \
-#     && pip install pyOpenSSL \
-#     && pip install ndg-httpsclient \
-#     && pip install pyasn1 \
-#     && pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql]==$AIRFLOW_VERSION \
-#     && pip install celery[redis]==4.1.1 \
-
-
-########
-# dbt
-# https://dbt.readme.io
-
-RUN conda install -y -c conda-forge dbt
-# RUN pip install dbt
 
 
 ########
