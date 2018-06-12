@@ -213,6 +213,7 @@ RUN Rscript -e "install.packages(c('caret', 'pmml'), dependencies=TRUE)"
 # Wrapping up
 
 COPY script/entrypoint.sh /entrypoint.sh
+COPY script/start_airflow.sh /start_airflow.sh
 
 COPY config/rserver.conf /etc/rstudio/rserver.conf
 COPY config/jupyterhub /etc/init.d/jupyterhub
@@ -220,6 +221,10 @@ COPY script/setup_git.sh /setup_git.sh
 
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 RUN chown -R airflow: ${AIRFLOW_HOME}
+
+ARG AIRFLOW_LOG_DIR=/usr/local/airflow
+RUN mkdir -p ${AIRFLOW_LOG_DIR}
+RUN chown -R airflow: ${AIRFLOW_LOG_DIR}
 
 
 # Standard SSH port
@@ -233,8 +238,7 @@ EXPOSE 22 5555 8000 8080 8787 8793
 
 # USER airflow
 # WORKDIR ${AIRFLOW_HOME}
-# CMD ["webserver"] # set default arg for entrypoint
  
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD [ "/bin/bash" ]
+CMD ["worker"] # set default arg for entrypoint for Airflow setup
