@@ -118,7 +118,7 @@ ARG AIRFLOW_VERSION=1.9.0
 ARG AIRFLOW_HOME=/usr/local/Airflow
 
 RUN useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow \
-    && pip install -U pip setuptools wheel \
+    && pip install -U setuptools wheel \
     && pip install Cython \
     && pip install pytz \
     && pip install pyOpenSSL \
