@@ -1,0 +1,10 @@
+datasci:
+  image: anelen/datasci
+  restart: always
+  ports:
+    - "8000:8000"
+    - "8793:8793"
+    - "8787:8787"
+  volumes:
+    - /Users/daigo/anelen:/home/ds
+  env_file: .env
