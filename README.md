@@ -33,6 +33,18 @@ $HOME/bin/setup_git.sh "Your Name" "your email"
 You should use https protocol to pull and push to remote repository.
 
 
+## Multiple Jupyter Hub/RStudio users
+
+1. Edit volume section of docker-composer.yml to mount host's directory to :/home (Instead of /home/ds for example)
+2. Shell into the container as root by `docker exec -it <container_id> /bin/bash
+3. Add user by
+    - `mkdir -p /home/<user_name>`
+    - `useradd <user_name> -d /home/<user_name>`
+    - `chown -r <user_name>: /home/<user_name>`
+    - `<user_name>:<initial_password> | chpasswd`
+4. The user can change their password with `passwd` command on the terminal on Jupyter Hub or R Studio
+
+
 ## TODOs
 
 - Run Airflow in Docker swarm mode with
