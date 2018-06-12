@@ -6,6 +6,9 @@ MAINTAINER Daigo Tanaka <daigo.tanaka@gmail.com>
 # upgrade is not recommended by the best practice page
 # RUN apt-get -y upgrade
 
+# Never prompts the user for choices on installation/configuration of packages
+ENV DEBIAN_FRONTEND noninteractive
+
 # Define locale
 ENV LANGUAGE en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -17,6 +20,7 @@ ENV LC_MESSAGES en_US.UTF-8
 # Note: Always combine apt-get update and install
 RUN set -ex \
     && buildDeps=' \
+        python-dev \
         python3-dev \
         libkrb5-dev \
         libsasl2-dev \
@@ -37,9 +41,9 @@ RUN set -ex \
         python3-requests \
         python3-setuptools \
         python3-pip \
-        # mysql-client \
-        # mysql-server \
-        # default-libmysqlclient-dev \
+        mysql-client \
+        mysql-server \
+        libmysqlclient-dev \
         apt-utils \
         curl \
         rsync \
@@ -117,16 +121,16 @@ RUN pip install dbt
 ARG AIRFLOW_VERSION=1.9.0
 ARG AIRFLOW_HOME=/usr/local/Airflow
 
+RUN pip install setuptools wheel
+
 RUN useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow \
-    && pip install -U setuptools wheel \
     && pip install Cython \
     && pip install pytz \
     && pip install pyOpenSSL \
     && pip install ndg-httpsclient \
     && pip install pyasn1 \
     && pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql]==${AIRFLOW_VERSION} \
-    && pip install celery[redis]==4.1.1 \
-RUN chown -R airflow: ${AIRFLOW_HOME}
+    && pip install celery[redis]==4.1.1
 
 
 ########
@@ -140,6 +144,7 @@ RUN apt-get install -y r-base psmisc \
 ########
 # Anaconda and JupyterHub
 
+ARG ANACONDA_PYTHON_VERSION=3
 ARG ANACONDA_VERSION=5.2.0
 ENV PATH="$PATH:/opt/conda/bin"
 
@@ -147,8 +152,7 @@ RUN apt-get update --fix-missing && \
     apt-get install -y bzip2 ca-certificates \
     libglib2.0-0 libxext6 libsm6 libxrender1
 
-RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-${ANACONDA_VERSION}-Linux-x86_64.sh -O ~/anaconda.sh && \
-# RUN wget --quiet https://repo.anaconda.com/archive/Anaconda2-${ANACONDA_VERSION}-Linux-x86_64.sh -O ~/anaconda.sh && \
+RUN wget --quiet https://repo.anaconda.com/archive/Anaconda${ANACONDA_PYTHON_VERSION}-${ANACONDA_VERSION}-Linux-x86_64.sh -O ~/anaconda.sh && \
     /bin/bash ~/anaconda.sh -b -p /opt/conda && \
     rm ~/anaconda.sh && \
     ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
@@ -212,8 +216,11 @@ COPY script/entrypoint.sh /entrypoint.sh
 
 COPY config/rserver.conf /etc/rstudio/rserver.conf
 COPY config/jupyterhub /etc/init.d/jupyterhub
-COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 COPY script/setup_git.sh /setup_git.sh
+
+COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
+RUN chown -R airflow: ${AIRFLOW_HOME}
+
 
 # Standard SSH port
 # 22: SSH
@@ -224,17 +231,10 @@ COPY script/setup_git.sh /setup_git.sh
 # 8793: Airflow worker log server port
 EXPOSE 22 5555 8000 8080 8787 8793
 
-# Airflow
-# COPY script/entrypoint.sh /entrypoint.sh
 # USER airflow
 # WORKDIR ${AIRFLOW_HOME}
 # CMD ["webserver"] # set default arg for entrypoint
  
-# USER ds
-# WORKDIR ${DS_HOME}
-
-# CMD ["webserver"] # set default arg for entrypoint
-# CMD ["/usr/sbin/sshd", "-D"]
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD [ "/bin/bash" ]
