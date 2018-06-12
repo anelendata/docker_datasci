@@ -2,11 +2,13 @@
 
 Loaded with:
 
-- JupyterHub
-- RStudio Server with a lot of commonly used packages
-- dbt
-- git
-- Airflow worker
+- [Jupyter Hub](https://jupyterhub.readthedocs.io/)
+- [Anaconda 3](https://anaconda.org)
+- [RStudio Server](https://www.rstudio.com) with a lot of commonly used packages
+- [dbt](https://dbt.readme.io)
+- [Apache Airflow](https://airflow.apache.org/) worker
+- [git](https://git-scm.com/)
+
 
 ## How to run
 
