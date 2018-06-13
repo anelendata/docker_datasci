@@ -210,6 +210,12 @@ RUN Rscript -e "install.packages(c('caret', 'pmml'), dependencies=TRUE)"
 
 
 ########
+# Install conda packages
+
+RUN conda install -y -c conda-forge tensorflow keras google-cloud-bigquery
+
+
+########
 # Wrapping up
 
 COPY script/entrypoint.sh /entrypoint.sh
