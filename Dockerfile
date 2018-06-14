@@ -224,6 +224,7 @@ COPY script/start_airflow.sh /start_airflow.sh
 COPY config/rserver.conf /etc/rstudio/rserver.conf
 COPY config/jupyterhub /etc/init.d/jupyterhub
 COPY script/setup_git.sh /setup_git.sh
+COPY script/add_user.sh /add_user.sh
 
 COPY config/airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 RUN chown -R airflow: ${AIRFLOW_HOME}

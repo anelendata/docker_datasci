@@ -7,18 +7,11 @@ echo "Setting up the the user $USER_NAME"
 ########
 # Add a user called ds
 
-USER_HOME=/home/$USER_NAME
-mkdir -p $USER_HOME
-useradd $USER_NAME -d $USER_HOME
-echo "$USER_NAME:$USER_PASSWORD" | chpasswd
-chown $USER_NAME:$USER_NAME $USER_HOME
+bash /add_user.sh $USER_NAME $USER_PASSWORD
 
-mkdir -p /home/$USER_NAME/bin
-cp /setup_git.sh /home/$USER_NAME/bin
-chown -R ds:ds /home/$USER_NAME/bin
+usermod -aG sudo $USER_NAME
 
-echo "Done setting up the user $USER_NAME"
-
+echo "Done setting up the admin user $USER_NAME"
 
 ########
 # Start RStudio Server
