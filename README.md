@@ -1,5 +1,7 @@
 # Anelen's Data Science environment docker image
 
+[Docker Hub page](https://hub.docker.com/r/anelen/datasci/)
+
 Loaded with:
 
 - [Jupyter Hub](https://jupyterhub.readthedocs.io/)
@@ -12,13 +14,14 @@ Loaded with:
 
 ## How to run
 
-1. Install [docker and docker-compose](https://docs.docker.com/compose/install/)
-2. Copy env_example to .env and edit
-3. Edit volume section of docker-compose.yml
+1. Clone this repo
+2. Install [docker and docker-compose](https://docs.docker.com/compose/install/)
+3. Copy env_example to .env and edit
+4. Edit volume section of docker-compose.yml
   - The path before ":" is an existing directory that will be visible to Jupyter and RStudio.
   - If you change USER_NAME in .env file, change the path after ":" accordingly.
-4. Run `docker-compose up -d`
-5. If running locally, point your browser to
+5. Run `docker-compose up -d`
+6. If running locally, point your browser to
   - Jupyter Hub http://localhost:8000
   - RStudio Server http://localhost:8787
 
