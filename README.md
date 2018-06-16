@@ -55,8 +55,14 @@ echo <user_name>:<initial_password> | chpasswd
 
 ## Running on Google Cloud Platform
 
-As I write this, GCP Compute Engine's container support does not have
-docker-compose. It does not support port forwarding or volume mapping.
+As I write this, Container Optimized OS does not have docker-compose. Unless
+you do [some work-around](https://cloud.google.com/community/tutorials/docker-compose-on-container-optimized-os),
+you cannot use the docker-compose command I showed above to start the service.
+Also note that
+[Containers on Compute Engine](https://cloud.google.com/compute/docs/containers/deploying-containers)
+is beta and it does not support port forwarding or volume mapping.
+
+I recommend following the example steps below.
 
 ### Create a Compute Engine VM instance
 
