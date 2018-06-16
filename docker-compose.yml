@@ -6,5 +6,6 @@ datasci:
     - "8793:8793"
     - "8787:8787"
   volumes:
-    - /Users/daigo/anelen:/home/ds
+    - /path_to_host/home2:/home
   env_file: .env
+

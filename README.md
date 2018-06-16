@@ -19,7 +19,6 @@ Loaded with:
 3. Copy env_example to .env and edit
 4. Edit volume section of docker-compose.yml
   - The path before ":" is an existing directory that will be visible to Jupyter and RStudio.
-  - If you change USER_NAME in .env file, change the path after ":" accordingly.
 5. Run `docker-compose up -d`
 6. If running locally, point your browser to
   - Jupyter Hub http://localhost:8000
@@ -82,7 +81,8 @@ You can do the following with [the browser-based terminal](https://cloud.google.
 GCP provides from the VM instances.
 
 ```
-sudo docker run -d -v /home:/home \
+sudo mkdir /mnt/stateful_partition/home2
+sudo docker run -d -v /mnt/stateful_partition/home2:/home \
     -p 8000:8000 -p 8787:8787 -p 8793:8793 \
     -e USER_NAME=<some_username> -e USER_PASSWORD=<strong_password> \
     --name datasci anelen/datasci
