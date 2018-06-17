@@ -236,7 +236,7 @@ RUN chown -R airflow: ${AIRFLOW_LOG_DIR}
 
 # Standard SSH port
 # 22: SSH
-# 5555: Redis to use in Airflow
+# 5555: Celery Flower to use in Airflow
 # 8000: Jupyter Hub
 # 8080: Airflow Web UI
 # 8787: R Studio Server

@@ -1,0 +1,33 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "webserver",
+    "namespace": "default",
+    "selfLink": "/api/v1/namespaces/default/services/webserver",
+    "uid": "945063e6-71d0-11e8-9e49-080027c4eb60",
+    "resourceVersion": "4840",
+    "creationTimestamp": "2018-06-17T01:48:49Z",
+    "labels": {
+      "run": "webserver"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "protocol": "TCP",
+        "port": 8080,
+        "targetPort": 8080
+      }
+    ],
+    "selector": {
+      "run": "webserver"
+    },
+    "type": "LoadBalancer",
+    "sessionAffinity": "None",
+    "externalTrafficPolicy": "Cluster"
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}

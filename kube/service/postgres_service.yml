@@ -1,0 +1,33 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "postgres",
+    "namespace": "default",
+    "selfLink": "/api/v1/namespaces/default/services/postgres",
+    "uid": "a99d5f31-71f2-11e8-bfa1-080027384646",
+    "resourceVersion": "5412",
+    "creationTimestamp": "2018-06-17T05:52:47Z",
+    "labels": {
+      "run": "postgres"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "protocol": "TCP",
+        "port": 5432,
+        "targetPort": 5432
+      }
+    ],
+    "selector": {
+      "run": "postgres"
+    },
+    "type": "LoadBalancer",
+    "sessionAffinity": "None",
+    "externalTrafficPolicy": "Cluster"
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}
