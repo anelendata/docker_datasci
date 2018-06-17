@@ -1,97 +1,51 @@
-{
-  "kind": "Deployment",
-  "apiVersion": "extensions/v1beta1",
-  "metadata": {
-    "name": "postgres",
-    "namespace": "default",
-    "selfLink": "/apis/extensions/v1beta1/namespaces/default/deployments/postgres",
-    "uid": "308581ec-71f2-11e8-bfa1-080027384646",
-    "resourceVersion": "5109",
-    "generation": 1,
-    "creationTimestamp": "2018-06-17T05:49:24Z",
-    "labels": {
-      "run": "postgres"
-    },
-    "annotations": {
-      "deployment.kubernetes.io/revision": "1"
-    }
-  },
-  "spec": {
-    "replicas": 1,
-    "selector": {
-      "matchLabels": {
-        "run": "postgres"
-      }
-    },
-    "template": {
-      "metadata": {
-        "creationTimestamp": null,
-        "labels": {
-          "run": "postgres"
-        }
-      },
-      "spec": {
-        "containers": [
-          {
-            "name": "postgres",
-            "image": "postgres:9.6",
-            "ports": [
-              {
-                "hostPort": 5432,
-                "containerPort": 5432,
-                "protocol": "TCP"
-              }
-            ],
-            "env": [
-              {
-                "name": "POSTGRES_USER",
-                "value": "airflow"
-              },
-              {
-                "name": "POSTGRES_PASSWORD",
-                "value": "airflow"
-              },
-              {
-                "name": "POSTGRES_DB",
-                "value": "airflow"
-              }
-            ],
-            "resources": {},
-            "terminationMessagePath": "/dev/termination-log",
-            "terminationMessagePolicy": "File",
-            "imagePullPolicy": "IfNotPresent"
-          }
-        ],
-        "restartPolicy": "Always",
-        "terminationGracePeriodSeconds": 30,
-        "dnsPolicy": "ClusterFirst",
-        "securityContext": {},
-        "schedulerName": "default-scheduler"
-      }
-    },
-    "strategy": {
-      "type": "RollingUpdate",
-      "rollingUpdate": {
-        "maxUnavailable": 1,
-        "maxSurge": 1
-      }
-    }
-  },
-  "status": {
-    "observedGeneration": 1,
-    "replicas": 1,
-    "updatedReplicas": 1,
-    "readyReplicas": 1,
-    "availableReplicas": 1,
-    "conditions": [
-      {
-        "type": "Available",
-        "status": "True",
-        "lastUpdateTime": "2018-06-17T05:49:24Z",
-        "lastTransitionTime": "2018-06-17T05:49:24Z",
-        "reason": "MinimumReplicasAvailable",
-        "message": "Deployment has minimum availability."
-      }
-    ]
-  }
-}
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: null
+  generation: 1
+  labels:
+    run: postgres
+  name: postgres
+  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: postgres
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: postgres
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_USER
+          value: airflow
+        - name: POSTGRES_PASSWORD
+          value: airflow
+        - name: POSTGRES_DB
+          value: airflow
+        image: postgres:9.6
+        imagePullPolicy: IfNotPresent
+        name: postgres
+        ports:
+        - containerPort: 5432
+          hostPort: 5432
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status: {}

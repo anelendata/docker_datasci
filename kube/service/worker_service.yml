@@ -1,46 +1,32 @@
-{
-  "kind": "Service",
-  "apiVersion": "v1",
-  "metadata": {
-    "name": "worker",
-    "namespace": "default",
-    "selfLink": "/api/v1/namespaces/default/services/worker",
-    "uid": "94748beb-71cb-11e8-9e49-080027c4eb60",
-    "resourceVersion": "2165",
-    "creationTimestamp": "2018-06-17T01:13:01Z",
-    "labels": {
-      "run": "worker"
-    }
-  },
-  "spec": {
-    "ports": [
-      {
-        "name": "port-1",
-        "protocol": "TCP",
-        "port": 8000,
-        "targetPort": 8000
-      },
-      {
-        "name": "port-2",
-        "protocol": "TCP",
-        "port": 8787,
-        "targetPort": 8787
-      },
-      {
-        "name": "port-3",
-        "protocol": "TCP",
-        "port": 8793,
-        "targetPort": 8793
-      }
-    ],
-    "selector": {
-      "run": "worker"
-    },
-    "type": "LoadBalancer",
-    "sessionAffinity": "None",
-    "externalTrafficPolicy": "Cluster"
-  },
-  "status": {
-    "loadBalancer": {}
-  }
-}
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: worker
+  name: worker
+  selfLink: /api/v1/namespaces/default/services/worker
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: port-1
+    nodePort: 30001
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+  - name: port-2
+    nodePort: 30787
+    port: 8787
+    protocol: TCP
+    targetPort: 8787
+  - name: port-3
+    nodePort: 30793
+    port: 8793
+    protocol: TCP
+    targetPort: 8793
+  selector:
+    run: worker
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer: {}

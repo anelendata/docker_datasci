@@ -3,18 +3,18 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    run: postgres
-  name: postgres
-  selfLink: /api/v1/namespaces/default/services/postgres
+    run: flower
+  name: flower
+  selfLink: /api/v1/namespaces/default/services/flower
 spec:
   externalTrafficPolicy: Cluster
   ports:
-  - nodePort: 31432
-    port: 5432
+  - nodePort: 31555
+    port: 5555
     protocol: TCP
-    targetPort: 5432
+    targetPort: 5555
   selector:
-    run: postgres
+    run: flower
   sessionAffinity: None
   type: LoadBalancer
 status:

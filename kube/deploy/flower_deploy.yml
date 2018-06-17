@@ -6,14 +6,14 @@ metadata:
   creationTimestamp: null
   generation: 1
   labels:
-    run: webserver
-  name: webserver
-  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/webserver
+    run: flower
+  name: flower
+  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/flower
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: webserver
+      run: flower
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -23,24 +23,20 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        run: webserver
+        run: flower
     spec:
       containers:
       - command:
         - /entrypoint.sh
-        - webserver
+        - flower
         env:
-        - name: LOAD_EX
-          value: "n"
-        - name: FERNET_KEY
-          value: 46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
         - name: EXECUTOR
           value: Celery
         image: puckel/docker-airflow:1.9.0-4
         imagePullPolicy: IfNotPresent
-        name: webserver
+        name: flower
         ports:
-        - containerPort: 8080
+        - containerPort: 5555
           protocol: TCP
         resources: {}
         terminationMessagePath: /dev/termination-log
