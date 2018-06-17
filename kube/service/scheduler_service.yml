@@ -1,0 +1,35 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "scheduler",
+    "namespace": "default",
+    "selfLink": "/api/v1/namespaces/default/services/scheduler",
+    "uid": "a1ae906f-7202-11e8-bfa1-080027384646",
+    "resourceVersion": "13939",
+    "creationTimestamp": "2018-06-17T07:47:06Z",
+    "labels": {
+      "run": "scheduler"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "protocol": "TCP",
+        "port": 5555,
+        "targetPort": 5555,
+        "nodePort": 30853
+      }
+    ],
+    "selector": {
+      "run": "scheduler"
+    },
+    "clusterIP": "10.0.0.98",
+    "type": "LoadBalancer",
+    "sessionAffinity": "None",
+    "externalTrafficPolicy": "Cluster"
+  },
+  "status": {
+    "loadBalancer": {}
+  }
+}
