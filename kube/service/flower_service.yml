@@ -7,15 +7,14 @@ metadata:
   name: flower
   selfLink: /api/v1/namespaces/default/services/flower
 spec:
-  externalTrafficPolicy: Cluster
   ports:
-  - nodePort: 31555
+  - name: flower
     port: 5555
     protocol: TCP
     targetPort: 5555
   selector:
     run: flower
   sessionAffinity: None
-  type: LoadBalancer
+  type: ClusterIP
 status:
   loadBalancer: {}

@@ -7,15 +7,14 @@ metadata:
   name: webserver
   selfLink: /api/v1/namespaces/default/services/webserver
 spec:
-  externalTrafficPolicy: Cluster
   ports:
-  - nodePort: 30080
+  - name: web
     port: 8080
     protocol: TCP
     targetPort: 8080
   selector:
     run: webserver
   sessionAffinity: None
-  type: LoadBalancer
+  type: ClusterIP
 status:
   loadBalancer: {}

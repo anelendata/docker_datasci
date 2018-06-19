@@ -9,17 +9,17 @@ metadata:
 spec:
   externalTrafficPolicy: Cluster
   ports:
-  - name: port-1
+  - name: jupyter
     nodePort: 30001
     port: 8000
     protocol: TCP
     targetPort: 8000
-  - name: port-2
+  - name: rstudio
     nodePort: 30787
     port: 8787
     protocol: TCP
     targetPort: 8787
-  - name: port-3
+  - name: airflowworker
     nodePort: 30793
     port: 8793
     protocol: TCP

@@ -7,15 +7,14 @@ metadata:
   name: redis
   selfLink: /api/v1/namespaces/default/services/redis
 spec:
-  externalTrafficPolicy: Cluster
   ports:
-  - nodePort: 32379
+  - name: redis
     port: 6379
     protocol: TCP
     targetPort: 6379
   selector:
     run: redis
   sessionAffinity: None
-  type: LoadBalancer
+  type: ClusterIP
 status:
   loadBalancer: {}
