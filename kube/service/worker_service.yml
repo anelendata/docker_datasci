@@ -7,26 +7,26 @@ metadata:
   name: worker
   selfLink: /api/v1/namespaces/default/services/worker
 spec:
-  externalTrafficPolicy: Cluster
   ports:
+  - name: ssh
+    port: 22
+    protocol: TCP
+    targetPort: 22
   - name: jupyter
-    nodePort: 30001
     port: 8000
     protocol: TCP
     targetPort: 8000
   - name: rstudio
-    nodePort: 30787
     port: 8787
     protocol: TCP
     targetPort: 8787
   - name: airflowworker
-    nodePort: 30793
     port: 8793
     protocol: TCP
     targetPort: 8793
   selector:
     run: worker
   sessionAffinity: None
-  type: LoadBalancer
+  type: ClusterIP
 status:
   loadBalancer: {}
