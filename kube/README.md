@@ -102,12 +102,12 @@ local_machine$ ssh <bastion external ip> -p 2222 -l admin
 Then from the ssh shell,
 
 ```
-config> host create --name <username on worker>_worker <username on worker>@worker
+config> host create --name <username on worker>_suite <username on suite>@suite
 ```
 
-<username on worker> can be any registered user on the worker.
+<username on suite> can be any registered user on the suite.
 One user that should be always on worker is the one set as USER_NAME in the
-[worker_deploy.yml](https://github.com/anelendata/docker_datasci/blob/master/kube/deploy/worker_deploy.yml)
+[suite_deploy.yml](https://github.com/anelendata/docker_datasci/blob/master/kube/deploy/suite_deploy.yml)
 (hopefully you changed the password!)
 
 Exit the ssh once, and again from the local machine,
@@ -127,17 +127,26 @@ To achieve this.
 Go back to the cluster,
 
 ```
-cluster_host$ kubectl exec $(kubectl get  pod |grep worker | cut -f 1 -d " ") -- <paste the clipboard>
+cluster_host$ kubectl exec -it $(kubectl get  pod |grep suite | cut -f 1 -d " ") -- /bin/bash
+```
+
+Then in the shell,
+
+```
+sudo su <username>
+cd
+mkdir -p .ssh
+<paste the command>
 ```
 
 Finally from the local machine, you can
 
 ```
-ssh <bastion external ip> -l <username on worker>_worker \
--L 8000:worker:8000 -L 8787:worker:8000 -L 8080:webserver:8080 -L 5555:flower:5555
+ssh <bastion external ip> -l <username on suite>_suite \
+-L 8000:suite:8000 -L 8787:suite:8787 -L 8080:webserver:8080 -L 5555:flower:5555
 ```
 
-To directly ssh into worker. The port 8000 and 8787 are forwarded, so as long
+To directly ssh into suite. The port 8000 and 8787 are forwarded, so as long
 as you maintain this SSH connection, you can point your browser to:
 
   - Jupyter Hub http://localhost:8000
