@@ -36,6 +36,7 @@ cluster_host$ cd docker_datasci/kube
 
 ```
 cluster_host$ kubectl create -f deploy
+cluster_host$ kubectl create -f service
 ```
 
 Go to [Workload](https://console.cloud.google.com/kubernetes/workload) page
@@ -50,13 +51,6 @@ cluster_host$ kubectl get pods
 to check. It may take a few minutes before worker deploy finishes because
 the docker image has a few gigabytes.
 
-Once everything is deployed, create the services by running this command from
-the cluster host:
-
-```
-cluster_host$ kubectl create -f service
-```
-
 ## Bastion server
 
 Just as in the
@@ -70,19 +64,8 @@ To better manage the SSH tunnel, I am using @moul's[ssh portal](https://github.c
 In the cluster console,
 
 ```
-cluster_host$ kubectl get pods
-```
-
-To list all the pods. Find pod name begins with "bastion-" and copy it to
-the clipboard.
-
-```
-cluster_host$ kubectl logs <bastion-pod-name>
-```
-```
 cluster_host$ kubectl logs $(kubectl get  pod |grep bastion | cut -f 1 -d " ")
 ```
-
 
 Find the line that says,
 
