@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: bastion
+  name: bastion
+  selfLink: /api/v1/namespaces/default/services/bastion
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 32222
+    port: 2222
+    protocol: TCP
+    targetPort: 2222
+  selector:
+    run: bastion
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer: {}
