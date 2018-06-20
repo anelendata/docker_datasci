@@ -6,14 +6,14 @@ metadata:
   creationTimestamp: null
   generation: 1
   labels:
-    run: worker
-  name: worker
-  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/worker
+    run: suite
+  name: suite
+  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/suite
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: worker
+      run: suite
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -23,28 +23,31 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        run: worker
+        run: suite
     spec:
       containers:
       - env:
-        - name: EXECUTOR
-          value: Celery
         - name: USER_NAME
           value: ds
         - name: USER_PASSWORD
           value: ds
         - name: START_JUPYTERHUB
-          value: "no"
-        - name: START_RSTUDIO
-          value: "no"
-        - name: START_AIRFLOW
           value: "yes"
+        - name: START_RSTUDIO
+          value: "yes"
+        - name: START_AIRFLOW
+          value: "no"
         image: anelen/datasci
         imagePullPolicy: Always
-        name: worker
+        name: suite
         ports:
-        - containerPort: 8793
-          hostPort: 8793
+        - containerPort: 22
+          protocol: TCP
+        - containerPort: 8000
+          hostPort: 8000
+          protocol: TCP
+        - containerPort: 8787
+          hostPort: 8787
           protocol: TCP
         resources: {}
         terminationMessagePath: /dev/termination-log

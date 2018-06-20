@@ -8,18 +8,6 @@ metadata:
   selfLink: /api/v1/namespaces/default/services/worker
 spec:
   ports:
-  - name: ssh
-    port: 22
-    protocol: TCP
-    targetPort: 22
-  - name: jupyter
-    port: 8000
-    protocol: TCP
-    targetPort: 8000
-  - name: rstudio
-    port: 8787
-    protocol: TCP
-    targetPort: 8787
   - name: airflowworker
     port: 8793
     protocol: TCP

@@ -138,8 +138,6 @@ then
 sudo docker start datasci
 ```
 
-## TODOs
+## Setting up Airflow to schedule data workflow jobs
 
-- Run Airflow in Docker swarm mode with
-  [Airflow master node](https://github.com/puckel/docker-airflow)
-- Connection to Spark
+See [this instruction](./kube/README.md)

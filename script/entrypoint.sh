@@ -2,7 +2,14 @@
 
 # It requires env vars USER_NAME and USER_PASSWORD
 
+
 echo "Setting up the the user $USER_NAME"
+
+if [[ -z "$USER_NAME" && -z "$USER_PASSWORD" ]]
+then
+    echo "You need to set env variables USER_NAME and USER_PASSWORD"
+    exit
+fi
 
 ########
 # Add a user called ds
@@ -16,10 +23,11 @@ echo "Done setting up the admin user $USER_NAME"
 ########
 # Start RStudio Server
 
-rstudio-server start
-
-echo "Started rstudio-server"
-
+if [[ "${START_RSTUDIO:=no}" == "yes" ]]
+then
+  rstudio-server start
+  echo "Started rstudio-server"
+fi
 
 ########
 # Start JupyterHub
@@ -29,23 +37,29 @@ chmod +x /etc/init.d/jupyterhub
 mkdir -p /etc/jupyterhub
 jupyterhub --generate-config -f /etc/jupyterhub/jupyterhub_config.py
 # Start jupyterhub
-service jupyterhub start
-# Stop jupyterhub
+
+if [[ "${START_JUPYTERHUB:=no}" == "yes" ]]
+then
+  service jupyterhub start
+  echo "Started JupyterHub"
+fi
+
+# How to stop jupyterhub
 # service jupyterhub stop
 # Start jupyterhub on boot
 # update-rc.d jupyterhub defaults
 # Or use rcconf to manage services http://manpages.ubuntu.com/manpages/natty/man8/rcconf.8.html
 # rcconf
 
-echo "Started JupyterHub"
-
 
 ########
 # Start Airflow
 
-su airflow -c "/start_airflow.sh $1"
-
-echo "Started Airflow $1"
+if [[ "${START_AIRFLOW:=no}" == "yes" ]]
+then
+  su airflow -c "/start_airflow.sh $1"
+  echo "Started Airflow $1"
+fi
 
 
 ########

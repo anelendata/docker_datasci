@@ -7,6 +7,10 @@ automaticcally execute data workflow using Apache Airflow.
 Here is an example to achieve a master-worker Airflow set up with
 Google Kubernetes Engine.
 
+We are using
+@puckel's [docker-airflow](https://github.com/puckel/docker-airflow) image.
+for the master node.
+
 ## Start a cluster
 
 Create a cluster from
@@ -157,4 +161,3 @@ as you maintain this SSH connection, you can point your browser to:
   - RStudio Server http://localhost:8787
   - Airflow Web UI http://localhost:8080
   - Airflow's Celery Flower: http://localhost:5555
-

@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    run: suite
+  name: suite
+  selfLink: /api/v1/namespaces/default/services/suite
+spec:
+  ports:
+  - name: ssh
+    port: 22
+    protocol: TCP
+    targetPort: 22
+  - name: jupyter
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+  - name: rstudio
+    port: 8787
+    protocol: TCP
+    targetPort: 8787
+  selector:
+    run: suite
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
