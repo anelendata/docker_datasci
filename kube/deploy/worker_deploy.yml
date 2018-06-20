@@ -38,7 +38,6 @@ spec:
         name: worker
         ports:
         - containerPort: 22
-          hostPort: 22
           protocol: TCP
         - containerPort: 8000
           hostPort: 8000
