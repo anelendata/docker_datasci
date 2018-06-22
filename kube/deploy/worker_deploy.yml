@@ -42,9 +42,6 @@ spec:
         image: anelen/datasci
         imagePullPolicy: Always
         name: worker
-        volumeMounts:
-        - mountPath: /usr/local/airflow
-          name: dag-volume
         ports:
         - containerPort: 8793
           hostPort: 8793
@@ -52,8 +49,11 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /usr/local/airflow
+          name: dags-volume
       volumes:
-      - name: dag-volume
+      - name: dags-volume
         gitRepo:
           repository: "https://<some_token>@github.com/<your_org>/<your_repo>.git"
       dnsPolicy: ClusterFirst
