@@ -6,14 +6,14 @@ metadata:
   creationTimestamp: null
   generation: 1
   labels:
-    run: flower
-  name: flower
-  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/flower
+    run: scheduler
+  name: scheduler
+  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/scheduler
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: flower
+      run: scheduler
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -23,31 +23,32 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        run: flower
+        run: scheduler
     spec:
       containers:
       - command:
         - /entrypoint.sh
-        - flower
+        - scheduler
         env:
+        - name: LOAD_EX
+          value: "n"
+        - name: FERNET_KEY
+          value: 46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
         - name: EXECUTOR
           value: Celery
         image: puckel/docker-airflow:1.9.0-4
         imagePullPolicy: IfNotPresent
-        name: flower
-        ports:
-        - containerPort: 5555
-          protocol: TCP
+        name: scheduler
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:
-        - mountPath: /usr/local/airflow
+        - mountPath: /usr/local/airflow/dags
           name: dags-volume
       volumes:
       - name: dags-volume
         gitRepo:
-          repository: "https://<some_token>@github.com/<your_org>/<your_repo>.git"
+          repository: "https://<some_token>@github.com/<your_account>/<your_dags_repo>.git"
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler

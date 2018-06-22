@@ -6,14 +6,14 @@ metadata:
   creationTimestamp: null
   generation: 1
   labels:
-    run: worker
-  name: worker
-  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/worker
+    run: flower
+  name: flower
+  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/flower
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: worker
+      run: flower
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -23,39 +23,31 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        run: worker
+        run: flower
     spec:
       containers:
-      - env:
+      - command:
+        - /entrypoint.sh
+        - flower
+        env:
         - name: EXECUTOR
           value: Celery
-        - name: USER_NAME
-          value: ds
-        - name: USER_PASSWORD
-          value: ds
-        - name: START_JUPYTERHUB
-          value: "no"
-        - name: START_RSTUDIO
-          value: "no"
-        - name: START_AIRFLOW
-          value: "yes"
-        image: anelen/datasci
-        imagePullPolicy: Always
-        name: worker
+        image: puckel/docker-airflow:1.9.0-4
+        imagePullPolicy: IfNotPresent
+        name: flower
         ports:
-        - containerPort: 8793
-          hostPort: 8793
+        - containerPort: 5555
           protocol: TCP
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:
-        - mountPath: /usr/local/airflow
+        - mountPath: /usr/local/airflow/dags
           name: dags-volume
       volumes:
       - name: dags-volume
         gitRepo:
-          repository: "https://<some_token>@github.com/<your_org>/<your_repo>.git"
+          repository: "https://<some_token>@github.com/<your_account>/<your_dags_repo>.git"
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
