@@ -41,13 +41,6 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
-        volumeMounts:
-        - mountPath: /usr/local/airflow/dags
-          name: dags-volume
-      volumes:
-      - name: dags-volume
-        gitRepo:
-          repository: "https://<some_token>@github.com/<your_account>/<your_dags_repo>.git"
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
