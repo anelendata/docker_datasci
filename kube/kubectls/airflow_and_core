@@ -1,0 +1,4 @@
+#!/bin/bash
+
+kubectl $1 -f $2/airflow
+kubectl $1 -f $2/core

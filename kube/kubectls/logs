@@ -1,0 +1,2 @@
+#!/bin/bash
+kubectl logs $(kubectl get  pod |grep $1 | cut -f 1 -d " ") -f

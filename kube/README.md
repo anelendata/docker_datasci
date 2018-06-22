@@ -143,7 +143,7 @@ Finally from the local machine, you can
 
 ```
 ssh <bastion external ip> -l <username on suite>_suite \
--L 8000:suite:8000 -L 8787:suite:8787 -L 8080:webserver:8080 -L 5555:flower:5555
+-L 8000:suite:8000 -L 8787:suite:8787 -L 8080:webserver:8080 -L 5555:flower:5555 -L 8793:worker:8793
 ```
 
 To directly ssh into suite. The port 8000 and 8787 are forwarded, so as long
