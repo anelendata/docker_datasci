@@ -51,13 +51,12 @@ spec:
         terminationMessagePolicy: File
         volumeMounts:
         - mountPath: /usr/local/airflow/dags
-          name: data-volume
-          subPath: dags
+          name: dags-volume
       volumes:
-      - name: data-volume
-        gcePersistentDisk:
-        pdName: data
-        fsType: ext4
+      - name: dags-volume
+        hostPath:
+          path: /var/dags
+          type: DirectoryOrCreate
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler

@@ -42,6 +42,14 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /usr/local/airflow/dags
+          name: dags-volume
+      volumes:
+      - name: dags-volume
+        hostPath:
+          path: /var/dags
+          type: DirectoryOrCreate
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
