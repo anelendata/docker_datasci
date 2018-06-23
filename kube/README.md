@@ -59,7 +59,7 @@ the endpoints for Jupyter Hub and
 RStudio are not exposed for the better security. You need to access through
 an SSH tunnel.
 
-To better manage the SSH tunnel, I am using @moul's[ssh portal](https://github.com/moul/sshportal).
+To better manage the SSH tunnel, I am using @moul's [ssh portal](https://github.com/moul/sshportal).
 
 In the cluster console,
 
@@ -139,17 +139,42 @@ mkdir -p .ssh
 <paste the command>
 ```
 
-Finally from the local machine, you can
+## Accessing the services through SSH tunnel
+
+If you set up the SSH portal correctly as in the previous section, you should
+be able to ssh to bastion server like this:
 
 ```
 ssh <bastion external ip> -l <username on suite>_suite \
 -L 8000:suite:8000 -L 8787:suite:8787 -L 8080:webserver:8080 -L 5555:flower:5555 -L 8793:worker:8793
 ```
 
-To directly ssh into suite. The port 8000 and 8787 are forwarded, so as long
-as you maintain this SSH connection, you can point your browser to:
+The ports are forwarded, so as long as you maintain this SSH connection, you can point your browser to:
 
   - Jupyter Hub http://localhost:8000
   - RStudio Server http://localhost:8787
   - Airflow Web UI http://localhost:8080
   - Airflow's Celery Flower: http://localhost:5555
+
+## Populating the dag files
+
+The current set up use [hostPath](https://kubernetes.io/docs/concepts/storage/volumes/#types-of-volumes)
+to mount the host directory (/var/dags) to Airflow webserver, scheduler, and workers
+at /usr/local/airflow/dags. The directory is empty at the deployment. So you
+should bash into one of the worker instance and manually populate edit or
+git-clone a repo you created to author the dags:
+
+```
+cluster_host$ kubectl exec -it $(kubectl get  pod |grep worker | cut -f 1 -d " ") -- /bin/bash
+```
+
+Then in the shell,
+
+```
+worker$ cd /usr/local/airflow/dags
+worker$ git clone https://github.com/your_account/your_dags_repo
+```
+
+for example.
+
+It may take a little before you see the added dags in the Airflow dashboard.
