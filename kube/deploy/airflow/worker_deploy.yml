@@ -29,8 +29,6 @@ spec:
       - env:
         - name: EXECUTOR
           value: Celery
-        - name: AIRFLOW__CORE__DONOT_PICKLE
-          value: True
         - name: USER_NAME
           value: ds
         - name: USER_PASSWORD

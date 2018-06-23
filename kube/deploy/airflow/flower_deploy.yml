@@ -32,8 +32,6 @@ spec:
         env:
         - name: EXECUTOR
           value: Celery
-        - name: AIRFLOW__CORE__DONOT_PICKLE
-          value: True
         image: puckel/docker-airflow:1.9.0-4
         imagePullPolicy: IfNotPresent
         name: flower
