@@ -112,25 +112,25 @@ RUN apt-get install -y curl grep sed dpkg && \
 # https://dbt.readme.io
 
 # RUN pip install -U pip setuptools \
-RUN pip install dbt
+RUN pip3 install dbt
 
 
 ########
 # Airflow
 
 ARG AIRFLOW_VERSION=1.9.0
-ARG AIRFLOW_HOME=/usr/local/Airflow
+ARG AIRFLOW_HOME=/usr/local/airflow
 
-RUN pip install setuptools wheel
+RUN pip3 install setuptools wheel
 
 RUN useradd -ms /bin/bash -d ${AIRFLOW_HOME} airflow \
-    && pip install Cython \
-    && pip install pytz \
-    && pip install pyOpenSSL \
-    && pip install ndg-httpsclient \
-    && pip install pyasn1 \
-    && pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql]==${AIRFLOW_VERSION} \
-    && pip install celery[redis]==4.1.1
+    && pip3 install Cython \
+    && pip3 install pytz \
+    && pip3 install pyOpenSSL \
+    && pip3 install ndg-httpsclient \
+    && pip3 install pyasn1 \
+    && pip3 install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql]==${AIRFLOW_VERSION} \
+    && pip3 install celery[redis]==4.1.1
 
 
 ########
