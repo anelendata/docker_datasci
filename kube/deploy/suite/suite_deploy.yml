@@ -52,6 +52,14 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /home
+          name: suite-home
+      volumes:
+      - name: suite-home
+        hostPath:
+          path: /var/suite/home
+          type: DirectoryOrCreate
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler

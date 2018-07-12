@@ -35,6 +35,14 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /
+          name: sshportal-root-volume
+      volumes:
+      - name: sshportal-root-volume
+        hostPath:
+          path: /var/sshportal
+          type: DirectoryOrCreate
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler

@@ -33,6 +33,8 @@ spec:
           value: airflow
         - name: POSTGRES_DB
           value: airflow
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
         image: postgres:9.6
         imagePullPolicy: IfNotPresent
         name: postgres
@@ -43,6 +45,14 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /pgdata
+          name: pgdata
+      volumes:
+      - name: pgdata
+        hostPath:
+          path: /var/lib/postgresql/data/pgdata
+          type: DirectoryOrCreate
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler

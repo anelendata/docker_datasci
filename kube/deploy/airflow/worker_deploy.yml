@@ -56,10 +56,16 @@ spec:
         volumeMounts:
         - mountPath: /usr/local/airflow/dags
           name: dags-volume
+        - mountPath: /usr/local/airflow/plugins
+          name: plugins-volume
       volumes:
       - name: dags-volume
         hostPath:
-          path: /var/dags
+          path: /var/airflow/dags
+          type: DirectoryOrCreate
+      - name: plugins-volume
+        hostPath:
+          path: /var/airflow/plugins
           type: DirectoryOrCreate
       dnsPolicy: ClusterFirst
       restartPolicy: Always
