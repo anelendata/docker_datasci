@@ -35,8 +35,10 @@ cluster_host$ cd docker_datasci/kube
 ```
 
 ```
-cluster_host$ kubectl create -f deploy
-cluster_host$ kubectl create -f service
+cluster_host$ kubectl create -f deploy/core
+cluster_host$ kubectl create -f deploy/sshtunnel
+cluster_host$ kubectl create -f deploy/suite
+cluster_host$ kubectl create -f deploy/airflow
 ```
 
 Go to [Workload](https://console.cloud.google.com/kubernetes/workload) page
@@ -50,6 +52,34 @@ cluster_host$ kubectl get pods
 
 to check. It may take a few minutes before worker deploy finishes because
 the docker image has a few gigabytes.
+
+Unfortunately, Kubernetes service overwrites the environment variables to locate
+the postgres redis services within the cluster preconfigured at the container
+level. So, it's a good idea to wait until all pods are ready before starting the
+services.
+
+Once all pods are confirmed to be the running state, start the services:
+
+```
+cluster_host$ kubectl create -f service/core
+cluster_host$ kubectl create -f service/sshtunnel
+cluster_host$ kubectl create -f service/suite
+cluster_host$ kubectl create -f service/airflow
+```
+
+Only bastion has the external IP availble and it may take a few minutes
+before it's ready.
+
+Go to [Services](https://console.cloud.google.com/kubernetes/discovery) page
+and keep on clicking REFRESH button until you see stats=OK for all.
+
+Alternatively, you can run
+
+```
+cluster_host$ kubectl get services
+```
+
+Make sure bastion service obtained an external IP before proceeding forward.
 
 ## Bastion server
 
@@ -102,10 +132,10 @@ local_machine$ ssh <bastion external ip> -p 2222 -l admin
 Then from the ssh shell,
 
 ```
-config> host create --name <username on worker>_suite <username on suite>@suite
+config> host create --name <username on suite>_suite <username on suite>@suite
 ```
 
-<username on suite> can be any registered user on the suite.
+`<username on suite>` can be any registered user on the suite.
 One user that should be always on worker is the one set as USER_NAME in the
 [suite_deploy.yml](https://github.com/anelendata/docker_datasci/blob/master/kube/deploy/suite_deploy.yml)
 (hopefully you changed the password!)
