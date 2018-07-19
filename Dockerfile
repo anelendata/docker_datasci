@@ -201,12 +201,15 @@ RUN add-apt-repository -y "ppa:marutter/c2d4u"
 RUN apt-get update && apt-get -y install r-cran-rstan
 
 RUN echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.us.r-project.org'; options(repos = r);" > ~/.Rprofile
+
 RUN Rscript -e "install.packages(c('rJava', 'RJDBC', 'RCurl', 'bigrquery'), dependencies=TRUE)"
 RUN Rscript -e "install.packages(c('dplyr', 'tidyr', 'stringr', 'dummies'), dependencies=TRUE)"
 RUN Rscript -e "install.packages(c('knitr', 'ggplot2', 'ggthemes', 'gridExtra', 'rCharts'), dependencies=TRUE)"
 RUN Rscript -e "install.packages(c('randomForest', 'xgboost'), dependencies=TRUE)"
 RUN Rscript -e "install.packages('prophet', dependencies=TRUE)"
 RUN Rscript -e "install.packages(c('caret', 'pmml'), dependencies=TRUE)"
+RUN Rscript -e "install.packages('devtools', dependencies=TRUE)"
+RUN Rscript -e "devtools::install_github('rstudio/bookdown')"
 
 
 ########
