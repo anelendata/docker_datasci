@@ -56,7 +56,8 @@ the docker image has a few gigabytes.
 Unfortunately, Kubernetes service overwrites the environment variables to locate
 the postgres redis services within the cluster preconfigured at the container
 level. So, it's a good idea to wait until all pods are ready before starting the
-services.
+services. (Update: This problem is
+[fixed](https://github.com/anelendata/docker_datasci/commit/1f6c753a).)
 
 Once all pods are confirmed to be the running state, start the services:
 
