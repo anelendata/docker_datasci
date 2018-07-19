@@ -2,7 +2,13 @@
 # Keep .env file private and don't commit to remote repository!
 USER_NAME=ds
 USER_PASSWORD=ds
-FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+
+# IDE
 START_JUPYTERHUB=yes
 START_RSTUDIO=yes
-START_AIRFLOW=no
+
+# Airflow worker
+START_AIRFLOW=yes
+FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
+EXECUTOR=Celery
+LOAD_EX="n"
