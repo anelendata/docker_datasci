@@ -1,0 +1,10 @@
+# Rename this file to .env and change password and etc.
+# Keep .env file private and don't commit to remote repository!
+USER_NAME=ds
+USER_PASSWORD=ds
+
+POSTGRES_USER=airflow
+POSTGRES_PASSWORD=airflow
+POSTGRES_DB=airflow
+# REDIS_PASSWORD=redispass
+FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=

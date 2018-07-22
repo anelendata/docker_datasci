@@ -1,0 +1,133 @@
+version: '3'
+services:
+    redis:
+        image: 'redis:3.2.7'
+        # command: redis-server --requirepass redispass
+        deploy:
+          mode: replicated
+          replicas: 1
+          placement:
+            constraints:
+            - node.hostname == master-node
+    postgres:
+        image: postgres:9.6
+        env_file: .env 
+        environment:
+        # Uncomment these lines to persist data on the local filesystem.
+            - PGDATA=/var/lib/postgresql/data/pgdata
+        volumes:
+            - /var/pgdata:/var/lib/postgresql/data/pgdata
+        deploy:
+          mode: replicated
+          replicas: 1
+          placement:
+            constraints:
+            - node.hostname == master-node
+
+    webserver:
+        image: puckel/docker-airflow:1.9.0-4
+        restart: always
+        depends_on:
+            - postgres
+            - redis
+        env_file: .env 
+        environment:
+            - LOAD_EX=n
+            - EXECUTOR=Celery
+        volumes:
+            - /var/dags:/usr/local/airflow/dags
+            # Uncomment to include custom plugins
+            # - ./plugins:/usr/local/airflow/plugins
+        ports:
+            - "8080:8080"
+        command: webserver
+        healthcheck:
+            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+            interval: 30s
+            timeout: 30s
+            retries: 3
+        deploy:
+          mode: replicated
+          replicas: 1
+          placement:
+            constraints:
+            - node.hostname == master-node
+
+    flower:
+        image: puckel/docker-airflow:1.9.0-4
+        restart: always
+        depends_on:
+            - redis
+        env_file: .env 
+        environment:
+            - EXECUTOR=Celery
+        ports:
+            - "5555:5555"
+        command: flower
+        deploy:
+          mode: replicated
+          replicas: 1
+          placement:
+            constraints:
+            - node.hostname == master-node
+
+    scheduler:
+        image: puckel/docker-airflow:1.9.0-4
+        restart: always
+        depends_on:
+            - webserver
+        volumes:
+            - /var/dags:/usr/local/airflow/dags
+            - /var/pgdata:/var/lib/postgresql/data/pgdata
+            # Uncomment to include custom plugins
+            # - ./plugins:/usr/local/airflow/plugins
+        env_file: .env 
+        environment:
+            - LOAD_EX=n
+            - EXECUTOR=Celery
+        command: scheduler
+        deploy:
+          mode: replicated
+          replicas: 1
+          placement:
+            constraints:
+            - node.hostname == master-node
+    worker:
+        image: anelen/datasci
+        restart: always
+        ports:
+          - "8793:8793"
+        volumes:
+            - /var/dags:/usr/local/airflow/dags
+        env_file: .env
+        environment:
+            - LOAD_EX=n
+            - EXECUTOR=Celery
+            - START_RSTUDIO=no
+            - START_JUPYTERHUB=no
+            - START_AIRFLOW=yes
+        deploy:
+          mode: replicated
+          replicas: 1
+          placement:
+            constraints:
+            - node.hostname == worker-node
+    suite:
+        image: anelen/datasci
+        restart: always
+        ports:
+          - "8000:8000"
+          - "8787:8787"
+        volumes:
+          - /var/home:/home
+        env_file: .env
+        environment:
+            - START_RSTUDIO=yes
+            - START_JUPYTERHUB=yes
+            - START_AIRFLOW=no
+        deploy:
+          mode: replicated
+          replicas: 1
+          placement:
+            constraints:
+            - node.hostname == worker-node
