@@ -3,16 +3,17 @@ services:
     redis:
         image: 'redis:3.2.7'
         # command: redis-server --requirepass redispass
+        logging:
+          # driver: "json-file"
+          options:
+            max-size: "25M"
+            max-file: "7"
         deploy:
           mode: replicated
           replicas: 1
           placement:
             constraints:
             - node.hostname == master-node
-        # log_driver: "json-file"
-        log_opt:
-          max-size: "25M"
-          max-file: "7"
     postgres:
         image: postgres:9.6
         env_file: .env 
@@ -21,17 +22,17 @@ services:
             - PGDATA=/var/lib/postgresql/data/pgdata
         volumes:
             - /var/pgdata:/var/lib/postgresql/data/pgdata
+        logging:
+          # driver: "json-file"
+          options:
+            max-size: "25M"
+            max-file: "7"
         deploy:
           mode: replicated
           replicas: 1
           placement:
             constraints:
             - node.hostname == master-node
-        # log_driver: "json-file"
-        log_opt:
-          max-size: "25M"
-          max-file: "7"
-
     webserver:
         image: puckel/docker-airflow:1.9.0-4
         restart: always
@@ -54,17 +55,17 @@ services:
             interval: 30s
             timeout: 30s
             retries: 3
+        logging:
+          # driver: "json-file"
+          options:
+            max-size: "25M"
+            max-file: "20"  # Webserver log is very chatty by default
         deploy:
           mode: replicated
           replicas: 1
           placement:
             constraints:
             - node.hostname == master-node
-        # log_driver: "json-file"
-        log_opt:
-          max-size: "25M"
-          max-file: "20"  # Webserver log is very chatty by default
-
     flower:
         image: puckel/docker-airflow:1.9.0-4
         restart: always
@@ -76,17 +77,17 @@ services:
         ports:
             - "5555:5555"
         command: flower
+        logging:
+          # driver: "json-file"
+          options:
+            max-size: "25M"
+            max-file: "7"
         deploy:
           mode: replicated
           replicas: 1
           placement:
             constraints:
             - node.hostname == master-node
-        # log_driver: "json-file"
-        log_opt:
-          max-size: "25M"
-          max-file: "7"
-
     scheduler:
         image: puckel/docker-airflow:1.9.0-4
         restart: always
@@ -102,17 +103,17 @@ services:
             - LOAD_EX=n
             - EXECUTOR=Celery
         command: scheduler
+        logging:
+          # driver: "json-file"
+          options:
+            max-size: "25M"
+            max-file: "7"
         deploy:
           mode: replicated
           replicas: 1
           placement:
             constraints:
             - node.hostname == master-node
-        # log_driver: "json-file"
-        log_opt:
-          max-size: "25M"
-          max-file: "7"
-
     worker:
         image: anelen/datasci
         restart: always
@@ -127,17 +128,17 @@ services:
             - START_RSTUDIO=no
             - START_JUPYTERHUB=no
             - START_AIRFLOW=yes
+        logging:
+          # driver: "json-file"
+          options:
+            max-size: "25M"
+            max-file: "7"
         deploy:
           mode: replicated
           replicas: 1
           placement:
             constraints:
             - node.hostname == worker-node
-        # log_driver: "json-file"
-        log_opt:
-          max-size: "25M"
-          max-file: "7"
-
     suite:
         image: anelen/datasci
         restart: always
@@ -151,10 +152,11 @@ services:
             - START_RSTUDIO=yes
             - START_JUPYTERHUB=yes
             - START_AIRFLOW=no
-        # log_driver: "json-file"
-        log_opt:
-          max-size: "25M"
-          max-file: "7"
+        logging:
+          # driver: "json-file"
+          options:
+            max-size: "25M"
+            max-file: "7"
         deploy:
           mode: replicated
           replicas: 1
