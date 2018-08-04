@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ldap-config
+data:
+  default.conf: |-
+    # Replace this default file:
+    server {
+        listen   80;
+            server_name  localhost;
+            root /usr/share/nginx/html;
+            location / {
+                index none;
+                autoindex on;
+                autoindex_exact_size off;
+                autoindex_localtime on;
+        }
+    }    
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: datasci-ldap
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: datasci-ldap
+    spec:
+      containers:
+      - name: openldap
+        image: osixia/openldap
+        ports:
+          - containerPort: 389
+          - containerPort: 636
+        volumeMounts:
+        - name: nfs
+          mountPath: /var/lib/ldap
+        - name: config-volume
+          mountPath: "/etc/ldap/slapd.d"
+      - name: phpldapadmin
+        image: osixia/phpldapadmin
+        ports:
+          - containerPort: 80
+        env:
+        - name: PHPLDAPADMIN_HTTPS
+          value: "false"
+        - name: PHPLDAPADMIN_LDAP_HOSTS
+          value: localhost
+      volumes:
+      - name: nfs
+        persistentVolumeClaim:
+          claimName: datasci-volume
+      - name: config-volume
+        configMap:
+          name: ldap-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: datasci-ldap
+spec:
+  ports:
+  - name: ldap
+    port: 389
+    targetPort: 389
+  - name: ldap-ssl
+    port: 636
+    targetPort: 636
+  selector:
+    app: datasci-ldap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: datasci-ldap-admin
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: datasci-ldap

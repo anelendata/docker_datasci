@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: datasci-nfs
+  labels:
+    volume: datasci-nfs
+spec:
+  capacity:
+    storage: 1Mi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    # FIXME: use the right IP from service
+    server: {{ X.X.X.X }}
+    path: "/exports"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: datasci-volume
+spec:
+  selector:
+    matchLabels:
+      volume: datasci-nfs
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Mi
