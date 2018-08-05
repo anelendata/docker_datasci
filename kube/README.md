@@ -209,3 +209,26 @@ worker$ git clone https://github.com/your_account/your_dags_repo
 for example.
 
 It may take a little before you see the added dags in the Airflow dashboard.
+
+## Tips
+
+### Log file size management
+
+Airflow scheduler logs may use up disk space. Here is a handy command to delete
+the logs older than 7 days:
+
+```
+cd kube/kubectl
+./exec scheduler "find /usr/local/airflow/logs/*/* -type f  -mtime +7"
+```
+
+For worker log clean up, refer to @teamclairvoyant 's
+[airflow-maintenance-dags](https://github.com/teamclairvoyant/airflow-maintenance-dags)
+
+Airflow webserver container's logging very chatty by default.
+
+
+## TODOs
+
+- Client-side LDAP support (suite)
+
