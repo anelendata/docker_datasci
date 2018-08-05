@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 
-# It requires env vars USER_NAME and USER_PASSWORD
+# This script requires env vars USER_NAME and USER_PASSWORD
 
+# TODO: Move this to Dockerfile
+sudo mkdir -p /mnt/disk1/home
+sudo mv /home /home_org
+sudo ln -s /mnt/disk1/home /home
+sudo mkdir -p /mnt/disk1/airflow/dags
+sudo mv $AIRFLOW_HOME/dags $AIRFLOW_HOME/dags_org
+sudo ln -s /mnt/disk1/airflow/dags $AIRFLOW_HOME/dags
 
 echo "Setting up the the user $USER_NAME"
 

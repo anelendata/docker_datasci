@@ -53,16 +53,16 @@ spec:
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:
-        - mountPath: /home
-          name: home-volume
+        - mountPath: /mnt/disk1
+          name: disk1
       volumes:
-      - name: home-volume
+      - name: disk1
       # Option 1. node local persistency
         hostPath:
-          path: /var/suite/home
+          path: /var/suite/disk1
           type: DirectoryOrCreate
       # Option 2. NFS to support multiple suite instances
-      #  persistentVolumeClaim:
+      #   persistentVolumeClaim:
       #     claimName: datasci-volume
       dnsPolicy: ClusterFirst
       restartPolicy: Always
