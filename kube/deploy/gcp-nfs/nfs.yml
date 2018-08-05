@@ -26,10 +26,9 @@ spec:
             mountPath: /exports
       volumes:
         - name: gcepd
-        # This GCE PD must already exist.
-        gcePersistentDisk:
-          pdName: datasci-cluster-pd-1
-          fsType: ext4
+          gcePersistentDisk:
+            pdName: datasci-cluster-pd-1
+            fsType: ext4
 ---
 kind: Service
 apiVersion: v1

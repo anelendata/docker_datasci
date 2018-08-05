@@ -5,13 +5,15 @@ metadata:
   labels:
     volume: datasci-nfs
 spec:
+  storageClassName: standard
   capacity:
     storage: 1Mi
   accessModes:
     - ReadWriteMany
   nfs:
     # FIXME: use the right IP from service
-    server: {{ X.X.X.X }}
+    # hint: kubectl get service |grep nfs
+    server: 10.19.253.7
     path: "/exports"
 ---
 kind: PersistentVolumeClaim

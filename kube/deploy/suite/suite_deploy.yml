@@ -54,12 +54,16 @@ spec:
         terminationMessagePolicy: File
         volumeMounts:
         - mountPath: /home
-          name: suite-home
+          name: home-volume
       volumes:
-      - name: suite-home
+      - name: home-volume
+      # Option 1. node local persistency
         hostPath:
           path: /var/suite/home
           type: DirectoryOrCreate
+      # Option 2. NFS to support multiple suite instances
+      #  persistentVolumeClaim:
+      #     claimName: datasci-volume
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
