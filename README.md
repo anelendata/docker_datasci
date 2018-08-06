@@ -2,6 +2,8 @@
 
 [Docker Hub page](https://hub.docker.com/r/anelen/datasci/)
 
+![screenshot](./images/screenshot.png)
+
 Loaded with:
 
 - [Jupyter Hub](https://jupyterhub.readthedocs.io/)
