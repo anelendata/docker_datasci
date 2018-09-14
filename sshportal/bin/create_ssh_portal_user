@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# . ./create_ssh_portal_user <host> <username> <email>
+
+ssh_admin="$1 -p 2222 -l admin"
+
+ssh ${ssh_admin} usergroup create --name $2
+ssh ${ssh_admin} user invite $3 --name $2 --group $2
+ssh ${ssh_admin} hostgroup create --name $2
+ssh ${ssh_admin} host create $2@suite --name $2_suite --group $2
+ssh ${ssh_admin} acl create --hostgroup $2 --usergroup $2
